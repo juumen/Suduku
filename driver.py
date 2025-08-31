@@ -1,5 +1,4 @@
 
-# driver.py
 import tkinter as tk
 from builder import SudokuBuilder
 from solver import solve_sudoku
@@ -19,7 +18,7 @@ def show_solution_window(root, grid):
 
     for i in range(9):
         for j in range(9):
-            # determine which 3x3 box this cell belongs to
+           
             box_index = (i // 3) * 3 + (j // 3)
             bg_color = BOX_COLORS[box_index]
 

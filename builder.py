@@ -1,4 +1,4 @@
-# builder.py
+
 import tkinter as tk
 
 class SudokuBuilder:
@@ -7,7 +7,10 @@ class SudokuBuilder:
         self.on_complete = on_complete
         self.sudoku_grid = []
 
-        self.entry_field = tk.Entry(root, width=20, font=('Arial', 16))
+       
+        vcmd = (root.register(self.validate_input), "%P")
+        self.entry_field = tk.Entry(root, width=20, font=('Arial', 16),
+                                    validate="key", validatecommand=vcmd)
         self.entry_field.grid(row=0, column=0, columnspan=4, pady=10)
 
         keys = [
@@ -22,6 +25,12 @@ class SudokuBuilder:
             button = tk.Button(root, text=text, width=5, height=2, font=('Arial', 12),
                                command=lambda t=text: self.on_button_click(t))
             button.grid(row=row, column=col, padx=5, pady=5)
+
+    def validate_input(self, new_value):
+        """Allow only up to 9 characters (digits or '?')."""
+        if len(new_value) > 9:
+            return False
+        return all(ch.isdigit() or ch == '?' for ch in new_value)
 
     def on_button_click(self, value):
         current_text = self.entry_field.get()
@@ -45,4 +54,6 @@ class SudokuBuilder:
                 print("Invalid row. Enter exactly 9 values (0–9 or ?).")
 
         else:
-            self.entry_field.insert(tk.END, value)
+            # insert button value only if < 9 chars
+            if len(current_text) < 9:
+                self.entry_field.insert(tk.END, value)
